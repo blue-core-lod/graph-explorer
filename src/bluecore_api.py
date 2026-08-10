@@ -6,7 +6,7 @@ from urllib.parse import urlencode
 
 from js import alert, console, document, File, FormData, sessionStorage
 from pyodide.http import AbortError, pyfetch
-from state import BLUECORE_ENV, BF_GRAPH
+from state import BASE_URI, BLUECORE_ENV, BF_GRAPH
 
 BF = rdflib.Namespace("http://id.loc.gov/ontologies/bibframe/")
 
@@ -170,8 +170,13 @@ async def search_bluecore(event):
 
 async def set_environment(this):
     global BLUECORE_ENV
+    global BASE_URI
     console.log(this)
     BLUECORE_ENV = this.target.getAttribute("data-env")
+    BASE_URI = f"{BLUECORE_ENV}/"
+    base_uri_input = document.getElementById("marc-base-uri")
+    if base_uri_input:
+        base_uri_input.value = BASE_URI
     bluecore_env_label = document.getElementById("bluecore-env-label")
     bluecore_env_label.innerHTML = f"for {BLUECORE_ENV}"
     sessionStorage.removeItem("keycloak_access_token")

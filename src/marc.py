@@ -8,7 +8,7 @@ from pyscript import fetch
 
 from helpers import BF
 from load_rdf import summarize_graph
-from state import BF_GRAPH
+from state import BASE_URI, BF_GRAPH
 
 
 async def _bf_graph_to_xml(bf_graph: rdflib.Graph):
@@ -92,8 +92,10 @@ async def marc2bf(event):
     xslt_root = etree.parse("./marc2bf/marc2bibframe2.xsl")
     marc2bf_xslt = etree.XSLT(xslt_root)
     marc_doc = etree.XML(marc_xml)
+    base_uri_input = document.getElementById("marc-base-uri")
+    baseuri = base_uri_input.value if base_uri_input and base_uri_input.value else BASE_URI
     try:
-        bf_xml = marc2bf_xslt(marc_doc)
+        bf_xml = marc2bf_xslt(marc_doc, baseuri=f"'{baseuri}'")
         BF_GRAPH.parse(data=str(bf_xml), format='xml')
         summarize_graph(BF_GRAPH)
     except Exception as e:

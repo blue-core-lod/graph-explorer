@@ -15,3 +15,5 @@ for ns in NAMESPACES:
     BF_GRAPH.namespace_manager.bind(ns[0], ns[1])
 
 BLUECORE_ENV = None
+
+BASE_URI = "https://dev.bcld.info" # "http://example.org/"
